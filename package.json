@@ -1,0 +1,15 @@
+{
+  "name": "json-file-genrator",
+  "version": "1.0.0",
+  "description": "Just a script to genrate multiple json files for testing or any other use",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Json",
+    "faker"
+  ],
+  "author": "Vaibhav Soni",
+  "license": "MIT"
+}
