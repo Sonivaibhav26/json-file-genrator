@@ -2,7 +2,7 @@ var schema = require('./schema.js'),
     fs = require('fs');
 
 var data = generator(schema);
-createfiles(data);
+//createfiles(data);
 
 
 
@@ -14,9 +14,42 @@ function generator(schema) {
         case 'Object':
             return getValueforObject(schema);
             break;
+        case 'Array':
+            return getValueforArray(schema);
+            break;
         default:
             break;
     }
+}
+
+function getValueforArray(schema) {
+    var arrayData = {
+        possibleValues: 0,
+        values: []
+    };
+    var combine = function (a) {
+        var fn = function (n, src, got, all) {
+            if (n == 0) {
+                if (got.length > 0) {
+                    all[all.length] = got;
+                }
+                return;
+            }
+            for (var j = 0; j < src.length; j++) {
+                fn(n - 1, src.slice(j + 1), got.concat([src[j]]), all);
+            }
+            return;
+        }
+        var all = [];
+        for (var i = 0; i < a.length; i++) {
+            fn(i, a, [], all);
+        }
+        all.push(a);
+        return all;
+    }
+    arrayData.values = combine(schema.values);
+    arrayData.possibleValues = arrayData.values.length;
+    return arrayData;
 }
 
 function getValueforString(value) {
@@ -104,7 +137,6 @@ function processDuplicates(generatedObject) {
     });
 
     objectData.possibleValues = objectData.values.length;
-
     return objectData;
 }
 
@@ -125,11 +157,13 @@ function createfiles(data) {
     generatedObjects.forEach(function (object) {
         var json = JSON.stringify(data[object]);
         fs.writeFile(object + '.json', json, 'utf8', function (err, data) {
-            if(data)
+            if (data)
                 console.log(data);
-            else if(err)
+            else if (err)
                 console.log(err);
         });
     });
 
 }
+
+console.log(data);

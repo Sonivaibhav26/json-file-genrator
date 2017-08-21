@@ -6,7 +6,7 @@ module.exports = {
             properties: {
                 name: {
                     type: 'String',
-                    values: 'testOrg|testOrg2'
+                    values: 'testOrg'
                 },
                 basic: {
                     type: 'Object',
@@ -17,23 +17,27 @@ module.exports = {
                         },
                         industry: {
                             type: 'String',
-                            values: 'Retail|IT'
+                            values: 'Retail'
                         },
                         type: {
                             type: 'String',
-                            values: 'Startup|SME'
+                            values: 'Startup'
                         },
                         data: {
                             type: 'Object',
                             properties: {
                                 name: {
                                     type: 'String',
-                                    values: 'Name1|Name'
+                                    values: 'Name1'
                                 }
                             }
                         }
                     }
 
+                },
+                depatments: {
+                    type: 'Array',
+                    values: ['HR', 'IT', 'Marketing']
                 }
             }
         }
