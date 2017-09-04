@@ -2,7 +2,7 @@ var schema = require('./schema.js'),
     fs = require('fs');
 
 var data = generator(schema);
-//createfiles(data);
+createfiles(data);
 
 
 
@@ -47,6 +47,26 @@ function getValueforArray(schema) {
         all.push(a);
         return all;
     }
+
+    //check if array contain any array
+    // var arraysToConsider = [];
+
+    // schema.values.forEach((element, elementIndex) => {
+    //     var type = typeof (element);
+    //     if (type === 'object' && element.type === 'Array') {
+    //         var subArrayData = getValueforArray(element);
+    //         for (var index = 0; index < subArrayData.possibleValues; index++) {
+    //             var newSubArrayToConsider = schema.values;
+    //             newSubArrayToConsider[elementIndex] = subArrayData.values[index];
+    //             arraysToConsider.push(JSON.parse(JSON.stringify(newSubArrayToConsider)));
+
+    //         }
+    //     } else if (elementIndex === schema.values.length - 1 && arraysToConsider.length === 0)
+    //         arraysToConsider = schema.values;
+
+    // });
+    // arrayData.values = arraysToConsider.map((array) => { return combine(array); });
+    // console.log(arrayData);
     arrayData.values = combine(schema.values);
     arrayData.possibleValues = arrayData.values.length;
     return arrayData;
@@ -154,9 +174,11 @@ function checkIfAlreadyExist(createdArray, createdObject) {
 
 function createfiles(data) {
     generatedObjects = Object.keys(data);
-    generatedObjects.forEach(function (object) {
+    generatedObjects.forEach(function (object, $index) {
+        //var fileName = createFileName(object, data[object]);
+        var fileName = schema.fileNamePrefix + $index;
         var json = JSON.stringify(data[object]);
-        fs.writeFile(object + '.json', json, 'utf8', function (err, data) {
+        fs.writeFile(fileName + '.json', json, 'utf8', function (err, data) {
             if (data)
                 console.log(data);
             else if (err)
@@ -166,4 +188,17 @@ function createfiles(data) {
 
 }
 
-console.log(data);
+// function createFileName(name, dataObject) {
+//     var keys = Object.keys(dataObject);
+//     var fileName = name + '_';
+//     for (var key in dataObject) {
+//         if (typeof (dataObject[key]) === 'string' || typeof (dataObject[key]) === 'number')
+//             fileName = fileName + '_' + key + '_' + dataObject[key] + '_';
+//         else {
+
+//             fileName = fileName + createFileName(key, dataObject[key]) + '_';
+//         }
+
+//     }
+//     return fileName;
+// }
