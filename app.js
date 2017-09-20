@@ -17,8 +17,25 @@ function generator(schema) {
         case 'Array':
             return getValueforArray(schema);
             break;
+        case 'Number':
+            return getValueforNumber(schema);
+            break;
         default:
             break;
+    }
+}
+
+function getValueforNumber(value) {
+    let numberData = {
+        possibleValues: 0,
+        values: []
+    };
+
+    if (value.values !== '$') {
+        numberData.possibleValues = 1;
+        numberData.values.push(value.values);
+        console.log(numberData);
+        return numberData;
     }
 }
 
@@ -91,6 +108,7 @@ function getValueforObject(schema) {
         if (object.hasOwnProperty(key)) {
             var element = object[key];
             subData = generator(element);
+            console.log(subData);
             if (subData === {}) {
                 generatedObject[key] = subData;
             }

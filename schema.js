@@ -17,7 +17,7 @@ module.exports = {
                         },
                         industry: {
                             type: 'String',
-                            values: 'Retail'
+                            values: 'Retail|IT'
                         },
                         type: {
                             type: 'String',
@@ -34,6 +34,10 @@ module.exports = {
                         }
                     }
 
+                },
+                holidaysTaken:{
+                    type: 'Number',
+                    values: 0
                 },
                 depatments: {
                     type: 'Array',
