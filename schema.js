@@ -35,9 +35,13 @@ module.exports = {
                     }
 
                 },
-                holidaysTaken:{
-                    type: 'Number',
-                    values: 0
+                email: {
+                    type: 'String',
+                    values: 'employee{{}}@mailinator.com',
+                    pattern: {
+                        type: 'Number',
+                        range: '.'//can also be 
+                    }
                 },
                 depatments: {
                     type: 'Array',

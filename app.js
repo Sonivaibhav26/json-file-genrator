@@ -1,4 +1,6 @@
 var schema = require('./schema.js'),
+    stringEngine = require('./lib/stringEngine.js'),
+    postProcessor = require('./lib/postProcessor.js'),
     fs = require('fs');
 
 var data = generator(schema);
@@ -9,7 +11,7 @@ createfiles(data);
 function generator(schema) {
     switch (schema.type) {
         case 'String':
-            return getValueforString(schema.values);
+            return stringEngine.gen(schema);
             break;
         case 'Object':
             return getValueforObject(schema);
@@ -34,7 +36,6 @@ function getValueforNumber(value) {
     if (value.values !== '$') {
         numberData.possibleValues = 1;
         numberData.values.push(value.values);
-        console.log(numberData);
         return numberData;
     }
 }
@@ -89,16 +90,7 @@ function getValueforArray(schema) {
     return arrayData;
 }
 
-function getValueforString(value) {
-    var stringData = {
-        possibleValues: 0,
-        values: []
-    };
-    value.split("|");
-    stringData.values = value.split("|");
-    stringData.possibleValues = value.split("|").length;
-    return stringData;
-}
+
 
 function getValueforObject(schema) {
     var object = schema.properties,
@@ -108,7 +100,6 @@ function getValueforObject(schema) {
         if (object.hasOwnProperty(key)) {
             var element = object[key];
             subData = generator(element);
-            console.log(subData);
             if (subData === {}) {
                 generatedObject[key] = subData;
             }
@@ -193,10 +184,10 @@ function checkIfAlreadyExist(createdArray, createdObject) {
 function createfiles(data) {
     generatedObjects = Object.keys(data);
     generatedObjects.forEach(function (object, $index) {
-        //var fileName = createFileName(object, data[object]);
-        var fileName = schema.fileNamePrefix + $index;
-        var json = JSON.stringify(data[object]);
-        fs.writeFile(fileName + '.json', json, 'utf8', function (err, data) {
+        let fileName = schema.fileNamePrefix + $index;
+        let fileContentWrite = postProcessor.gen(data[object], $index);
+
+        fs.writeFile(fileName + '.json', fileContentWrite, 'utf8', function (err, data) {
             if (data)
                 console.log(data);
             else if (err)
